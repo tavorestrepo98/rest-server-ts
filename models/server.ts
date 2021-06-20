@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
 import cors from 'cors';
 
 import userRoutes from '../routes/user.routes';
@@ -26,7 +26,10 @@ class Server {
     }
 
     middlewares(){
-        this.app.use(cors({ origin: true }))
+        this.app.use(cors({ origin: true }));
+
+        //parseo de body
+        this.app.use(express.json());
     }
 
     routes(){

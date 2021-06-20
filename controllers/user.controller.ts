@@ -5,11 +5,25 @@ export const getUsers = (req: Request, res: Response) => {
 };
 
 export const postUsers = (req: Request, res: Response) => {
-    res.send('Hola mundo');
+    const body = req.body;
+    console.log('body: ', body);
+
+    res.status(200).json({
+        message: 'Post-users',
+        body
+    });
 };
 
 export const putUsers = (req: Request, res: Response) => {
-    res.send('Hola mundo');
+
+    const id = req.params.id;
+    const query = req.query;
+
+    res.status(200).json({
+        message: 'Put-user',
+        id,
+        query
+    });
 };
 
 export const deleteUsers = (req: Request, res: Response) => {
