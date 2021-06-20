@@ -8,3 +8,4 @@ router.post('/', user_controller_1.postUsers);
 router.put('/:id', user_controller_1.putUsers);
 router.delete('/', user_controller_1.deleteUsers);
 exports.default = router;
+//# sourceMappingURL=user.routes.js.map

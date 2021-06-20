@@ -7,3 +7,4 @@ var dotenv_1 = __importDefault(require("dotenv"));
 var server_1 = __importDefault(require("./models/server"));
 dotenv_1.default.config();
 var server = new server_1.default();
+//# sourceMappingURL=index.js.map

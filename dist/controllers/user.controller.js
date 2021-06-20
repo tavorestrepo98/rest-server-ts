@@ -28,3 +28,4 @@ var deleteUsers = function (req, res) {
     res.send('Hola mundo');
 };
 exports.deleteUsers = deleteUsers;
+//# sourceMappingURL=user.controller.js.map
