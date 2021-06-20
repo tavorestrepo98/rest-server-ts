@@ -39,50 +39,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var cors_1 = __importDefault(require("cors"));
-var config_db_1 = require("../db/config.db");
-var user_routes_1 = __importDefault(require("../routes/user.routes"));
-var Server = /** @class */ (function () {
-    function Server() {
-        this.app = express_1.default();
-        this.port = process.env.PORT || '3000';
-        this.path = {
-            users: '/api/users'
-        };
-        //conectar a base de datos
-        this.conectarDb();
-        this.middlewares();
-        this.routes();
-        this.listen();
-    }
-    Server.prototype.middlewares = function () {
-        this.app.use(cors_1.default({ origin: true }));
-        //parseo de body
-        this.app.use(express_1.default.json());
-    };
-    Server.prototype.routes = function () {
-        this.app.use(this.path.users, user_routes_1.default);
-    };
-    Server.prototype.conectarDb = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, config_db_1.dbConnection()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Server.prototype.listen = function () {
-        var _this = this;
-        this.app.listen(this.port, function () {
-            console.log('Listen port ', _this.port);
-        });
-    };
-    return Server;
-}());
-exports.default = Server;
-//# sourceMappingURL=server.js.map
+exports.dbConnection = void 0;
+var mongoose_1 = __importDefault(require("mongoose"));
+var dbConnection = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, mongoose_1.default.connect(process.env.MONGODB_CNN, {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true,
+                        useCreateIndex: true,
+                        useFindAndModify: false
+                    })];
+            case 1:
+                _a.sent();
+                console.log('Base de datos online');
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.log(error_1);
+                throw new Error('Error en la iniciación de la base de datos');
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.dbConnection = dbConnection;
+//# sourceMappingURL=config.db.js.map

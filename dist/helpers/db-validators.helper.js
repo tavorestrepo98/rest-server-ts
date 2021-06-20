@@ -35,54 +35,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var cors_1 = __importDefault(require("cors"));
-var config_db_1 = require("../db/config.db");
-var user_routes_1 = __importDefault(require("../routes/user.routes"));
-var Server = /** @class */ (function () {
-    function Server() {
-        this.app = express_1.default();
-        this.port = process.env.PORT || '3000';
-        this.path = {
-            users: '/api/users'
-        };
-        //conectar a base de datos
-        this.conectarDb();
-        this.middlewares();
-        this.routes();
-        this.listen();
-    }
-    Server.prototype.middlewares = function () {
-        this.app.use(cors_1.default({ origin: true }));
-        //parseo de body
-        this.app.use(express_1.default.json());
-    };
-    Server.prototype.routes = function () {
-        this.app.use(this.path.users, user_routes_1.default);
-    };
-    Server.prototype.conectarDb = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, config_db_1.dbConnection()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
+exports.roleValidator = void 0;
+var role_model_1 = require("../models/role.model");
+var roleValidator = function (role) {
+    if (role === void 0) { role = ''; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var existRole;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, role_model_1.Role.findOne({ role: role })];
+                case 1:
+                    existRole = _a.sent();
+                    if (!existRole) {
+                        throw new Error("El role " + role + " no est\u00E1 en la BD");
+                    }
+                    return [2 /*return*/];
+            }
         });
-    };
-    Server.prototype.listen = function () {
-        var _this = this;
-        this.app.listen(this.port, function () {
-            console.log('Listen port ', _this.port);
-        });
-    };
-    return Server;
-}());
-exports.default = Server;
-//# sourceMappingURL=server.js.map
+    });
+};
+exports.roleValidator = roleValidator;
+//# sourceMappingURL=db-validators.helper.js.map
