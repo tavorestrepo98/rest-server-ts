@@ -54,6 +54,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUsers = exports.putUsers = exports.postUsers = exports.getUsers = void 0;
 var bcrypt = __importStar(require("bcryptjs"));
@@ -63,7 +74,7 @@ var getUsers = function (req, res) {
 };
 exports.getUsers = getUsers;
 var postUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, password, role, user, existeEmail, salt, usuarioCreado, error_1;
+    var _a, name, email, password, role, user, salt, usuarioCreado, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -74,48 +85,54 @@ var postUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     password: password,
                     role: role
                 });
-                return [4 /*yield*/, user_model_1.User.findOne({ email: email })];
-            case 1:
-                existeEmail = _b.sent();
-                if (existeEmail) {
-                    return [2 /*return*/, res.status(400).json({
-                            message: 'Este correo ya está registrado'
-                        })];
-                }
                 salt = bcrypt.genSaltSync(10);
                 user['password'] = bcrypt.hashSync(password, salt);
-                _b.label = 2;
-            case 2:
-                _b.trys.push([2, 4, , 5]);
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, user.save()];
-            case 3:
+            case 2:
                 usuarioCreado = _b.sent();
                 res.status(200).json({
                     message: 'Post-users',
                     newUser: usuarioCreado
                 });
-                return [3 /*break*/, 5];
-            case 4:
+                return [3 /*break*/, 4];
+            case 3:
                 error_1 = _b.sent();
                 res.status(400).json({
                     message: 'Error al crear usuario',
                     error: error_1
                 });
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.postUsers = postUsers;
-var putUsers = function (req, res) {
-    var id = req.params.id;
-    var query = req.query;
-    res.status(200).json({
-        message: 'Put-user',
-        id: id,
-        query: query
+var putUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, _a, password, google, payload, salt, usuario;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                id = req.params.id;
+                _a = req.body, password = _a.password, google = _a.google, payload = __rest(_a, ["password", "google"]);
+                //todo validar frente a DB
+                if (password) {
+                    salt = bcrypt.genSaltSync(10);
+                    payload['password'] = bcrypt.hashSync(password, salt);
+                }
+                return [4 /*yield*/, user_model_1.User.findByIdAndUpdate(id, payload)];
+            case 1:
+                usuario = _b.sent();
+                res.status(200).json({
+                    message: 'Put-user',
+                    usuario: usuario
+                });
+                return [2 /*return*/];
+        }
     });
-};
+}); };
 exports.putUsers = putUsers;
 var deleteUsers = function (req, res) {
     res.send('Hola mundo');

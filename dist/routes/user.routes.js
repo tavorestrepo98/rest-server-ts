@@ -9,6 +9,7 @@ var router = express_1.Router();
 router.get('/', user_controller_1.getUsers);
 router.post('/', [
     express_validator_1.check('name', 'El nombre es obligarotio').not().isEmpty(),
+    express_validator_1.check('email').custom(db_validators_helper_1.emailValidator),
     express_validator_1.check('email', 'El correo no es válido').isEmail(),
     express_validator_1.check('password', 'La contraseña es obligarotio').not().isEmpty(),
     express_validator_1.check('password', 'La contraseña debe de tener mínimo 6 letras').isLength({ min: 6 }),
@@ -16,7 +17,13 @@ router.post('/', [
     // check('role', 'No es un role válido').isIn(['admin', 'user']),
     validar_campos_1.validarCampos
 ], user_controller_1.postUsers);
-router.put('/:id', user_controller_1.putUsers);
+router.put('/:id', [
+    express_validator_1.check('id', 'El id debe tener formato mongoId').isMongoId(),
+    express_validator_1.check('id').custom(db_validators_helper_1.existUserValidator),
+    express_validator_1.check('email').custom(db_validators_helper_1.emailValidator),
+    express_validator_1.check('role').custom(db_validators_helper_1.roleValidator),
+    validar_campos_1.validarCampos
+], user_controller_1.putUsers);
 router.delete('/', user_controller_1.deleteUsers);
 exports.default = router;
 //# sourceMappingURL=user.routes.js.map

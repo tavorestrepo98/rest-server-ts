@@ -1,6 +1,18 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-const UserSchema = new Schema({
+interface IUser {
+    name: string;
+    email: string;
+    password: string;
+    img?: string;
+    role: string;
+    state?: boolean;
+    google?: boolean
+}
+
+interface IUserDoc extends IUser, Document {}
+
+const UserSchemaFields: Record<keyof IUser, any> = {
     name: {
         type: String,
         required: [true, 'El nombre es obligatorio'],
@@ -31,6 +43,14 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false
     }
-});
+};
+
+const UserSchema: Schema<IUserDoc> = new Schema(UserSchemaFields);
+
+UserSchema.methods.toJSON = function(){
+    const { __v, password, ...user } = this.toObject();
+
+    return user;
+};
 
 export const User = model('User', UserSchema);

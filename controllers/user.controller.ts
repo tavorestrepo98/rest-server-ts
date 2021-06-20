@@ -18,16 +18,6 @@ export const postUsers = async (req: Request, res: Response) => {
         password,
         role
     });
-    
-
-    //Verificar si el email existe
-    const existeEmail = await User.findOne({email});
-
-    if(existeEmail){
-        return res.status(400).json({
-            message: 'Este correo ya está registrado'
-        });
-    }
 
 
     //Encriptar contraseña
@@ -52,20 +42,24 @@ export const postUsers = async (req: Request, res: Response) => {
     }
 
 
-    
-    
-
 };
 
-export const putUsers = (req: Request, res: Response) => {
+export const putUsers = async (req: Request, res: Response) => {
 
     const id = req.params.id;
-    const query = req.query;
+    const { password, google, ...payload } = req.body;
+
+    //todo validar frente a DB
+    if(password){
+        const salt = bcrypt.genSaltSync(10);
+        payload['password'] = bcrypt.hashSync(password, salt);
+    }
+
+    const usuario = await User.findByIdAndUpdate(id, payload);
 
     res.status(200).json({
         message: 'Put-user',
-        id,
-        query
+        usuario
     });
 };
 

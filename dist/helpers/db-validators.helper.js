@@ -36,8 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.roleValidator = void 0;
+exports.existUserValidator = exports.emailValidator = exports.roleValidator = void 0;
 var role_model_1 = require("../models/role.model");
+var user_model_1 = require("../models/user.model");
 var roleValidator = function (role) {
     if (role === void 0) { role = ''; }
     return __awaiter(void 0, void 0, void 0, function () {
@@ -56,4 +57,40 @@ var roleValidator = function (role) {
     });
 };
 exports.roleValidator = roleValidator;
+var emailValidator = function (email) {
+    if (email === void 0) { email = ''; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var existEmail;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, user_model_1.User.findOne({ email: email })];
+                case 1:
+                    existEmail = _a.sent();
+                    if (existEmail) {
+                        throw new Error("El email " + email + " ya existe");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.emailValidator = emailValidator;
+var existUserValidator = function (id) {
+    if (id === void 0) { id = ''; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var existUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, user_model_1.User.findById(id)];
+                case 1:
+                    existUser = _a.sent();
+                    if (!existUser) {
+                        throw new Error("El usuario con id " + id + " no existe en la BD");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.existUserValidator = existUserValidator;
 //# sourceMappingURL=db-validators.helper.js.map
