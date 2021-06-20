@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
-    "build": "tsc",
     "nodemon": "nodemon dist/index.js"
   },
   "author": "Gustavo Restrepo",
