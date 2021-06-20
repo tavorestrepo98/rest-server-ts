@@ -1,10 +1,49 @@
 import { Request, Response } from 'express';
+import { FilterQuery } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 
 import { User } from '../models/user.model';
 
-export const getUsers = (req: Request, res: Response) => {
-    res.send('Hola mundo');
+interface IQueryGetUsers {
+    state: boolean
+}
+
+export const getUsers = async (req: Request, res: Response) => {
+
+    const { limite = 5, desde = 0 } = req.query;
+
+    const query: FilterQuery<IQueryGetUsers> = {
+        state: true
+    };
+
+    // const usuarios = await User.find(query)
+    // .skip(Number(desde))
+    // .limit(Number(limite));
+
+    // const total = await User.countDocuments(query);
+
+    const [total, usuarios] = await Promise.all([
+        User.countDocuments(query),
+        User.find(query)
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ]);
+
+    res.status(200).json({
+        total,
+        usuarios
+    });
+};
+
+export const getUser = async (req: Request, res: Response) => {
+
+    const id = req.params.id;
+
+    const user = await User.findById(id);
+
+    res.status(200).json(user);
+
+
 };
 
 export const postUsers = async (req: Request, res: Response) => {
@@ -63,6 +102,17 @@ export const putUsers = async (req: Request, res: Response) => {
     });
 };
 
-export const deleteUsers = (req: Request, res: Response) => {
-    res.send('Hola mundo');
+export const deleteUsers = async (req: Request, res: Response) => {
+
+    let { id } = req.params;
+
+    let userDeleted = await User.findByIdAndUpdate(id, {
+        state: false
+    }, {
+        new: true
+    });
+
+    res.status(200).json({
+        userDeleted
+    });
 };

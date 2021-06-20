@@ -66,13 +66,50 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUsers = exports.putUsers = exports.postUsers = exports.getUsers = void 0;
+exports.deleteUsers = exports.putUsers = exports.postUsers = exports.getUser = exports.getUsers = void 0;
 var bcrypt = __importStar(require("bcryptjs"));
 var user_model_1 = require("../models/user.model");
-var getUsers = function (req, res) {
-    res.send('Hola mundo');
-};
+var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, _b, limite, _c, desde, query, _d, total, usuarios;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
+            case 0:
+                _a = req.query, _b = _a.limite, limite = _b === void 0 ? 5 : _b, _c = _a.desde, desde = _c === void 0 ? 0 : _c;
+                query = {
+                    state: true
+                };
+                return [4 /*yield*/, Promise.all([
+                        user_model_1.User.countDocuments(query),
+                        user_model_1.User.find(query)
+                            .skip(Number(desde))
+                            .limit(Number(limite))
+                    ])];
+            case 1:
+                _d = _e.sent(), total = _d[0], usuarios = _d[1];
+                res.status(200).json({
+                    total: total,
+                    usuarios: usuarios
+                });
+                return [2 /*return*/];
+        }
+    });
+}); };
 exports.getUsers = getUsers;
+var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                return [4 /*yield*/, user_model_1.User.findById(id)];
+            case 1:
+                user = _a.sent();
+                res.status(200).json(user);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.getUser = getUser;
 var postUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, name, email, password, role, user, salt, usuarioCreado, error_1;
     return __generator(this, function (_b) {
@@ -134,8 +171,25 @@ var putUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); };
 exports.putUsers = putUsers;
-var deleteUsers = function (req, res) {
-    res.send('Hola mundo');
-};
+var deleteUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, userDeleted;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                return [4 /*yield*/, user_model_1.User.findByIdAndUpdate(id, {
+                        state: false
+                    }, {
+                        new: true
+                    })];
+            case 1:
+                userDeleted = _a.sent();
+                res.status(200).json({
+                    userDeleted: userDeleted
+                });
+                return [2 /*return*/];
+        }
+    });
+}); };
 exports.deleteUsers = deleteUsers;
 //# sourceMappingURL=user.controller.js.map

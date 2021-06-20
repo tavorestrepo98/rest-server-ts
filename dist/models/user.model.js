@@ -33,7 +33,7 @@ var UserSchemaFields = {
     role: {
         type: String,
         required: true,
-        enum: ['admin', 'user'],
+        enum: ['admin', 'user', 'ventas'],
         default: 'user'
     },
     state: {

@@ -4,11 +4,17 @@ import { check } from 'express-validator';
 import { validarCampos } from '../middlewares/validar-campos';
 import { roleValidator, emailValidator, existUserValidator } from '../helpers/db-validators.helper';
 
-import { getUsers, postUsers, putUsers, deleteUsers } from '../controllers/user.controller';
+import { getUsers, getUser, postUsers, putUsers, deleteUsers } from '../controllers/user.controller';
 
 const router = Router();
 
 router.get('/', getUsers);
+
+router.get('/:id', [
+    check('id', 'El id debe tener formato mongoId').isMongoId(),
+    check('id').custom(existUserValidator),
+    validarCampos
+], getUser);
 
 router.post('/', [
     check('name', 'El nombre es obligarotio').not().isEmpty(),
@@ -29,6 +35,10 @@ router.put('/:id', [
     validarCampos
 ],putUsers);
 
-router.delete('/', deleteUsers);
+router.delete('/:id', [
+    check('id', 'El id debe tener formato mongoId').isMongoId(),
+    check('id').custom(existUserValidator),
+    validarCampos
+], deleteUsers);
 
 export default router;
