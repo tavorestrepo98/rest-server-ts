@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.existeUsuarioAutenticado = exports.existUserValidatorByIdAndState = exports.existUserValidatorByEmail = exports.existUserValidator = exports.emailValidator = exports.roleValidator = void 0;
+exports.existUserValidatorByIdAndState = exports.existUserValidatorByEmail = exports.existUserValidator = exports.emailValidator = exports.roleValidator = void 0;
 var role_model_1 = require("../models/role.model");
 var user_model_1 = require("../models/user.model");
 var roleValidator = function (role) {
@@ -136,14 +136,4 @@ var existUserValidatorByIdAndState = function (id) {
     });
 };
 exports.existUserValidatorByIdAndState = existUserValidatorByIdAndState;
-var existeUsuarioAutenticado = function (user) {
-    if (user === void 0) { user = {}; }
-    if (!user) {
-        throw new Error("Token no v\u00E1lido - usuario no existe");
-    }
-    if (!user['state']) {
-        throw new Error('Token no válido - usuario con state false');
-    }
-};
-exports.existeUsuarioAutenticado = existeUsuarioAutenticado;
 //# sourceMappingURL=db-validators.helper.js.map

@@ -51,14 +51,3 @@ export const existUserValidatorByIdAndState = async (id = '') => {
 
 }
 
-export const existeUsuarioAutenticado = (user = {}) => {
-  
-    if(!user){
-        throw new Error(`Token no válido - usuario no existe`);
-    }
-
-    if(!user['state']){
-        throw new Error('Token no válido - usuario con state false')
-    }
-
-}

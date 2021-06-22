@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
 
-import { validarCampos } from '../middlewares/validar-campos';
-import { validarJWT } from '../middlewares/validar-JWT';
-import { roleUserValidator } from '../middlewares/validar-role';
-import { existeUsuarioAutenticado } from '../middlewares/validar-token';
+import { validarCampos, 
+         validarJWT, 
+         existeUsuarioAutenticado, 
+         roleAdminValidator, 
+         tieneRole } from '../middlewares/index';
 
 import { roleValidator,
         emailValidator, 
@@ -45,7 +46,8 @@ router.put('/:id', [
 router.delete('/:id', [
     validarJWT,
     existeUsuarioAutenticado,
-    roleUserValidator,
+    // roleAdminValidator,
+    tieneRole('admin', 'ventas'),
     check('id', 'El id debe tener formato mongoId').isMongoId(),
     check('id').custom(existUserValidatorByIdAndState),
     validarCampos
