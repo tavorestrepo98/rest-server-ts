@@ -43,12 +43,9 @@ export const getUser = async (req: Request, res: Response) => {
 
     res.status(200).json(user);
 
-
 };
 
 export const postUsers = async (req: Request, res: Response) => {
-
-    
 
     const {name, email, password, role} = req.body;
     const user = new User({
@@ -104,13 +101,28 @@ export const putUsers = async (req: Request, res: Response) => {
 
 export const deleteUsers = async (req: Request, res: Response) => {
 
+    const uid = req['uid'];
+
     let { id } = req.params;
+
+    // const usuarioAutenticado = req['user'];
+
+    // if(!usuarioAutenticado){
+    //     return res.status(401).json({
+    //         message: 'Token no válido - usuario no existe'
+    //     });
+    // }
+
+    // //verificar si el uid tiene estado true
+    // if(!usuarioAutenticado.state){
+    //     return res.status(401).json({
+    //         message: 'Token no válido - usuario con state false'
+    //     });
+    // }
 
     let userDeleted = await User.findByIdAndUpdate(id, {
         state: false
-    }, {
-        new: true
-    });
+    }, { new: true });
 
     res.status(200).json({
         userDeleted

@@ -172,16 +172,15 @@ var putUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.putUsers = putUsers;
 var deleteUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, userDeleted;
+    var uid, id, userDeleted;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                uid = req['uid'];
                 id = req.params.id;
                 return [4 /*yield*/, user_model_1.User.findByIdAndUpdate(id, {
                         state: false
-                    }, {
-                        new: true
-                    })];
+                    }, { new: true })];
             case 1:
                 userDeleted = _a.sent();
                 res.status(200).json({

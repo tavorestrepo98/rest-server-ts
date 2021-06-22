@@ -2,7 +2,14 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 
 import { validarCampos } from '../middlewares/validar-campos';
-import { roleValidator, emailValidator, existUserValidator } from '../helpers/db-validators.helper';
+import { validarJWT } from '../middlewares/validar-JWT';
+import { roleUserValidator } from '../middlewares/validar-role';
+import { existeUsuarioAutenticado } from '../middlewares/validar-token';
+
+import { roleValidator,
+        emailValidator, 
+        existUserValidator, 
+        existUserValidatorByIdAndState } from '../helpers/db-validators.helper';
 
 import { getUsers, getUser, postUsers, putUsers, deleteUsers } from '../controllers/user.controller';
 
@@ -18,8 +25,8 @@ router.get('/:id', [
 
 router.post('/', [
     check('name', 'El nombre es obligarotio').not().isEmpty(),
-    check('email').custom(emailValidator),
     check('email', 'El correo no es válido').isEmail(),
+    check('email').custom(emailValidator),
     check('password', 'La contraseña es obligarotio').not().isEmpty(),
     check('password', 'La contraseña debe de tener mínimo 6 letras').isLength({ min: 6 }),
     check('role').custom(roleValidator),
@@ -36,8 +43,11 @@ router.put('/:id', [
 ],putUsers);
 
 router.delete('/:id', [
+    validarJWT,
+    existeUsuarioAutenticado,
+    roleUserValidator,
     check('id', 'El id debe tener formato mongoId').isMongoId(),
-    check('id').custom(existUserValidator),
+    check('id').custom(existUserValidatorByIdAndState),
     validarCampos
 ], deleteUsers);
 

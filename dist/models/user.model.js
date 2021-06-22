@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -47,8 +58,8 @@ var UserSchemaFields = {
 };
 var UserSchema = new mongoose_1.Schema(UserSchemaFields);
 UserSchema.methods.toJSON = function () {
-    var _a = this.toObject(), __v = _a.__v, password = _a.password, user = __rest(_a, ["__v", "password"]);
-    return user;
+    var _a = this.toObject(), __v = _a.__v, password = _a.password, _id = _a._id, user = __rest(_a, ["__v", "password", "_id"]);
+    return __assign({ uid: _id }, user);
 };
 exports.User = mongoose_1.model('User', UserSchema);
 //# sourceMappingURL=user.model.js.map

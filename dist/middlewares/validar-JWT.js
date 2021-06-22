@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,57 +54,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var cors_1 = __importDefault(require("cors"));
-var config_db_1 = require("../db/config.db");
-var user_routes_1 = __importDefault(require("../routes/user.routes"));
-var auth_routes_1 = __importDefault(require("../routes/auth.routes"));
-var Server = /** @class */ (function () {
-    function Server() {
-        this.app = express_1.default();
-        this.port = process.env.PORT || '3000';
-        this.path = {
-            users: '/api/users',
-            auth: '/api/auth'
-        };
-        //conectar a base de datos
-        this.conectarDb();
-        this.middlewares();
-        this.routes();
-        this.listen();
-    }
-    Server.prototype.middlewares = function () {
-        this.app.use(cors_1.default({ origin: true }));
-        //parseo de body
-        this.app.use(express_1.default.json());
-    };
-    Server.prototype.routes = function () {
-        this.app.use(this.path.users, user_routes_1.default);
-        this.app.use(this.path.auth, auth_routes_1.default);
-    };
-    Server.prototype.conectarDb = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, config_db_1.dbConnection()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
+exports.validarJWT = void 0;
+var jwt = __importStar(require("jsonwebtoken"));
+var user_model_1 = require("../models/user.model");
+var validarJWT = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var token, payload, _a, _b, error_1;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                token = req.header('x-token');
+                if (!token) {
+                    return [2 /*return*/, res.status(401).json({
+                            message: 'No hay token en la petición'
+                        })];
                 }
-            });
-        });
-    };
-    Server.prototype.listen = function () {
-        var _this = this;
-        this.app.listen(this.port, function () {
-            console.log('Listen port ', _this.port);
-        });
-    };
-    return Server;
-}());
-exports.default = Server;
-//# sourceMappingURL=server.js.map
+                _c.label = 1;
+            case 1:
+                _c.trys.push([1, 3, , 4]);
+                payload = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
+                req['uid'] = payload['uid'];
+                _a = req;
+                _b = 'user';
+                return [4 /*yield*/, user_model_1.User.findById(payload['uid'])];
+            case 2:
+                _a[_b] = _c.sent();
+                next();
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _c.sent();
+                console.log(error_1);
+                res.status(401).json({
+                    message: 'Token no válido'
+                });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.validarJWT = validarJWT;
+//# sourceMappingURL=validar-JWT.js.map

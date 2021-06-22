@@ -48,9 +48,12 @@ const UserSchemaFields: Record<keyof IUser, any> = {
 const UserSchema: Schema<IUserDoc> = new Schema(UserSchemaFields);
 
 UserSchema.methods.toJSON = function(){
-    const { __v, password, ...user } = this.toObject();
+    const { __v, password, _id, ...user } = this.toObject();
 
-    return user;
+    return {
+        uid: _id, 
+        ...user
+    };
 };
 
 export const User = model('User', UserSchema);

@@ -3,9 +3,11 @@ import cors from 'cors';
 
 import { dbConnection } from '../db/config.db';
 import userRoutes from '../routes/user.routes';
+import authRoutes from '../routes/auth.routes';
 
 interface Path {
-    users: string
+    users: string,
+    auth: string
 }
 
 class Server {
@@ -18,7 +20,8 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || '3000';
         this.path = {
-            users: '/api/users'
+            users: '/api/users',
+            auth: '/api/auth'
         };
 
         //conectar a base de datos
@@ -38,6 +41,7 @@ class Server {
 
     routes(){
         this.app.use(this.path.users, userRoutes);
+        this.app.use(this.path.auth, authRoutes);
     }
 
     async conectarDb(){

@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var express_validator_1 = require("express-validator");
 var validar_campos_1 = require("../middlewares/validar-campos");
+var validar_JWT_1 = require("../middlewares/validar-JWT");
+var validar_role_1 = require("../middlewares/validar-role");
+var validar_token_1 = require("../middlewares/validar-token");
 var db_validators_helper_1 = require("../helpers/db-validators.helper");
 var user_controller_1 = require("../controllers/user.controller");
 var router = express_1.Router();
@@ -14,8 +17,8 @@ router.get('/:id', [
 ], user_controller_1.getUser);
 router.post('/', [
     express_validator_1.check('name', 'El nombre es obligarotio').not().isEmpty(),
-    express_validator_1.check('email').custom(db_validators_helper_1.emailValidator),
     express_validator_1.check('email', 'El correo no es válido').isEmail(),
+    express_validator_1.check('email').custom(db_validators_helper_1.emailValidator),
     express_validator_1.check('password', 'La contraseña es obligarotio').not().isEmpty(),
     express_validator_1.check('password', 'La contraseña debe de tener mínimo 6 letras').isLength({ min: 6 }),
     express_validator_1.check('role').custom(db_validators_helper_1.roleValidator),
@@ -30,8 +33,11 @@ router.put('/:id', [
     validar_campos_1.validarCampos
 ], user_controller_1.putUsers);
 router.delete('/:id', [
+    validar_JWT_1.validarJWT,
+    validar_token_1.existeUsuarioAutenticado,
+    validar_role_1.roleUserValidator,
     express_validator_1.check('id', 'El id debe tener formato mongoId').isMongoId(),
-    express_validator_1.check('id').custom(db_validators_helper_1.existUserValidator),
+    express_validator_1.check('id').custom(db_validators_helper_1.existUserValidatorByIdAndState),
     validar_campos_1.validarCampos
 ], user_controller_1.deleteUsers);
 exports.default = router;

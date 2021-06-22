@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.existUserValidator = exports.emailValidator = exports.roleValidator = void 0;
+exports.existeUsuarioAutenticado = exports.existUserValidatorByIdAndState = exports.existUserValidatorByEmail = exports.existUserValidator = exports.emailValidator = exports.roleValidator = void 0;
 var role_model_1 = require("../models/role.model");
 var user_model_1 = require("../models/user.model");
 var roleValidator = function (role) {
@@ -93,4 +93,57 @@ var existUserValidator = function (id) {
     });
 };
 exports.existUserValidator = existUserValidator;
+var existUserValidatorByEmail = function (email) {
+    if (email === void 0) { email = ''; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var existUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, user_model_1.User.findOne({
+                        email: email,
+                        state: true
+                    })];
+                case 1:
+                    existUser = _a.sent();
+                    console.log(existUser);
+                    if (!existUser) {
+                        throw new Error("El usuario con el email " + email + " no existe en la BD");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.existUserValidatorByEmail = existUserValidatorByEmail;
+var existUserValidatorByIdAndState = function (id) {
+    if (id === void 0) { id = ''; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var existUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, user_model_1.User.findOne({
+                        _id: id,
+                        state: true
+                    })];
+                case 1:
+                    existUser = _a.sent();
+                    if (!existUser) {
+                        throw new Error("El usuario con el id " + id + " no existe o no est\u00E1 activo");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.existUserValidatorByIdAndState = existUserValidatorByIdAndState;
+var existeUsuarioAutenticado = function (user) {
+    if (user === void 0) { user = {}; }
+    if (!user) {
+        throw new Error("Token no v\u00E1lido - usuario no existe");
+    }
+    if (!user['state']) {
+        throw new Error('Token no válido - usuario con state false');
+    }
+};
+exports.existeUsuarioAutenticado = existeUsuarioAutenticado;
 //# sourceMappingURL=db-validators.helper.js.map
