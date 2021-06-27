@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { User } from '../models/user.model';
+import { User } from '../models/index';
 import { generarJWT } from '../helpers/generarJWT.helper';
 
 import * as bcrypt from 'bcryptjs';

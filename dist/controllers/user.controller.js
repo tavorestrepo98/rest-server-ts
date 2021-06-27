@@ -68,7 +68,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUsers = exports.putUsers = exports.postUsers = exports.getUser = exports.getUsers = void 0;
 var bcrypt = __importStar(require("bcryptjs"));
-var user_model_1 = require("../models/user.model");
+var index_1 = require("../models/index");
 var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b, limite, _c, desde, query, _d, total, usuarios;
     return __generator(this, function (_e) {
@@ -79,8 +79,8 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     state: true
                 };
                 return [4 /*yield*/, Promise.all([
-                        user_model_1.User.countDocuments(query),
-                        user_model_1.User.find(query)
+                        index_1.User.countDocuments(query),
+                        index_1.User.find(query)
                             .skip(Number(desde))
                             .limit(Number(limite))
                     ])];
@@ -101,7 +101,7 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
         switch (_a.label) {
             case 0:
                 id = req.params.id;
-                return [4 /*yield*/, user_model_1.User.findById(id)];
+                return [4 /*yield*/, index_1.User.findById(id)];
             case 1:
                 user = _a.sent();
                 res.status(200).json(user);
@@ -116,7 +116,7 @@ var postUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, f
         switch (_b.label) {
             case 0:
                 _a = req.body, name = _a.name, email = _a.email, password = _a.password, role = _a.role;
-                user = new user_model_1.User({
+                user = new index_1.User({
                     name: name,
                     email: email,
                     password: password,
@@ -159,7 +159,7 @@ var putUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     salt = bcrypt.genSaltSync(10);
                     payload['password'] = bcrypt.hashSync(password, salt);
                 }
-                return [4 /*yield*/, user_model_1.User.findByIdAndUpdate(id, payload)];
+                return [4 /*yield*/, index_1.User.findByIdAndUpdate(id, payload)];
             case 1:
                 usuario = _b.sent();
                 res.status(200).json({
@@ -178,7 +178,7 @@ var deleteUsers = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 0:
                 uid = req['uid'];
                 id = req.params.id;
-                return [4 /*yield*/, user_model_1.User.findByIdAndUpdate(id, {
+                return [4 /*yield*/, index_1.User.findByIdAndUpdate(id, {
                         state: false
                     }, { new: true })];
             case 1:

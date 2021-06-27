@@ -57,7 +57,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validarJWT = void 0;
 var jwt = __importStar(require("jsonwebtoken"));
-var user_model_1 = require("../models/user.model");
+var index_1 = require("../models/index");
 var validarJWT = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var token, payload, _a, _b, error_1;
     return __generator(this, function (_c) {
@@ -76,7 +76,7 @@ var validarJWT = function (req, res, next) { return __awaiter(void 0, void 0, vo
                 req['uid'] = payload['uid'];
                 _a = req;
                 _b = 'user';
-                return [4 /*yield*/, user_model_1.User.findById(payload['uid'])];
+                return [4 /*yield*/, index_1.User.findById(payload['uid'])];
             case 2:
                 _a[_b] = _c.sent();
                 next();

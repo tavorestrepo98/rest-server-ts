@@ -1,5 +1,4 @@
-import { Role } from '../models/role.model';
-import { User } from '../models/user.model';
+import { User, Role, Category, Product } from '../models';
 
 
 export const roleValidator = async (role = '') => {
@@ -47,6 +46,32 @@ export const existUserValidatorByIdAndState = async (id = '') => {
 
     if(!existUser){
         throw new Error(`El usuario con el id ${id} no existe o no está activo`);
+    }
+
+}
+
+export const existCategory = async(id = '') => {
+
+    const existCategory = await Category.findOne({
+        _id: id,
+        state: true
+    });
+
+    if(!existCategory){
+        throw new Error(`La categoria con el id ${id} no existe o no está activo`);
+    }
+
+}
+
+export const existProduct = async(id = '') => {
+
+    const existProduct = await Product.findOne({
+        _id: id,
+        state: true
+    });
+
+    if(!existProduct){
+        throw new Error(`El producto con el id ${id} no existe o no está activo`);
     }
 
 }

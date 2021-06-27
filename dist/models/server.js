@@ -44,13 +44,17 @@ var cors_1 = __importDefault(require("cors"));
 var config_db_1 = require("../db/config.db");
 var user_routes_1 = __importDefault(require("../routes/user.routes"));
 var auth_routes_1 = __importDefault(require("../routes/auth.routes"));
+var category_routes_1 = __importDefault(require("../routes/category.routes"));
+var product_routes_1 = __importDefault(require("../routes/product.routes"));
 var Server = /** @class */ (function () {
     function Server() {
         this.app = express_1.default();
         this.port = process.env.PORT || '3000';
         this.path = {
             users: '/api/users',
-            auth: '/api/auth'
+            auth: '/api/auth',
+            categories: '/api/categories',
+            products: '/api/products'
         };
         //conectar a base de datos
         this.conectarDb();
@@ -66,6 +70,8 @@ var Server = /** @class */ (function () {
     Server.prototype.routes = function () {
         this.app.use(this.path.users, user_routes_1.default);
         this.app.use(this.path.auth, auth_routes_1.default);
+        this.app.use(this.path.categories, category_routes_1.default);
+        this.app.use(this.path.products, product_routes_1.default);
     };
     Server.prototype.conectarDb = function () {
         return __awaiter(this, void 0, void 0, function () {

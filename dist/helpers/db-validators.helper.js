@@ -36,16 +36,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.existUserValidatorByIdAndState = exports.existUserValidatorByEmail = exports.existUserValidator = exports.emailValidator = exports.roleValidator = void 0;
-var role_model_1 = require("../models/role.model");
-var user_model_1 = require("../models/user.model");
+exports.existProduct = exports.existCategory = exports.existUserValidatorByIdAndState = exports.existUserValidatorByEmail = exports.existUserValidator = exports.emailValidator = exports.roleValidator = void 0;
+var models_1 = require("../models");
 var roleValidator = function (role) {
     if (role === void 0) { role = ''; }
     return __awaiter(void 0, void 0, void 0, function () {
         var existRole;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, role_model_1.Role.findOne({ role: role })];
+                case 0: return [4 /*yield*/, models_1.Role.findOne({ role: role })];
                 case 1:
                     existRole = _a.sent();
                     if (!existRole) {
@@ -63,7 +62,7 @@ var emailValidator = function (email) {
         var existEmail;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_model_1.User.findOne({ email: email })];
+                case 0: return [4 /*yield*/, models_1.User.findOne({ email: email })];
                 case 1:
                     existEmail = _a.sent();
                     if (existEmail) {
@@ -81,7 +80,7 @@ var existUserValidator = function (id) {
         var existUser;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_model_1.User.findById(id)];
+                case 0: return [4 /*yield*/, models_1.User.findById(id)];
                 case 1:
                     existUser = _a.sent();
                     if (!existUser) {
@@ -99,7 +98,7 @@ var existUserValidatorByEmail = function (email) {
         var existUser;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_model_1.User.findOne({
+                case 0: return [4 /*yield*/, models_1.User.findOne({
                         email: email,
                         state: true
                     })];
@@ -121,7 +120,7 @@ var existUserValidatorByIdAndState = function (id) {
         var existUser;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_model_1.User.findOne({
+                case 0: return [4 /*yield*/, models_1.User.findOne({
                         _id: id,
                         state: true
                     })];
@@ -136,4 +135,46 @@ var existUserValidatorByIdAndState = function (id) {
     });
 };
 exports.existUserValidatorByIdAndState = existUserValidatorByIdAndState;
+var existCategory = function (id) {
+    if (id === void 0) { id = ''; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var existCategory;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, models_1.Category.findOne({
+                        _id: id,
+                        state: true
+                    })];
+                case 1:
+                    existCategory = _a.sent();
+                    if (!existCategory) {
+                        throw new Error("La categoria con el id " + id + " no existe o no est\u00E1 activo");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.existCategory = existCategory;
+var existProduct = function (id) {
+    if (id === void 0) { id = ''; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var existProduct;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, models_1.Product.findOne({
+                        _id: id,
+                        state: true
+                    })];
+                case 1:
+                    existProduct = _a.sent();
+                    if (!existProduct) {
+                        throw new Error("El producto con el id " + id + " no existe o no est\u00E1 activo");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.existProduct = existProduct;
 //# sourceMappingURL=db-validators.helper.js.map

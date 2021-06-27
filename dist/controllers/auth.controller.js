@@ -56,7 +56,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
-var user_model_1 = require("../models/user.model");
+var index_1 = require("../models/index");
 var generarJWT_helper_1 = require("../helpers/generarJWT.helper");
 var bcrypt = __importStar(require("bcryptjs"));
 var login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -68,7 +68,7 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, user_model_1.User.findOne({
+                return [4 /*yield*/, index_1.User.findOne({
                         email: email,
                         state: true
                     })];

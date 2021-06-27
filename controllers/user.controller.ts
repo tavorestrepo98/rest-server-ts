@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { FilterQuery } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 
-import { User } from '../models/user.model';
+import { User } from '../models/index';
 
 interface IQueryGetUsers {
     state: boolean
