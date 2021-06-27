@@ -41,11 +41,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
+var express_fileupload_1 = __importDefault(require("express-fileupload"));
 var config_db_1 = require("../db/config.db");
 var user_routes_1 = __importDefault(require("../routes/user.routes"));
 var auth_routes_1 = __importDefault(require("../routes/auth.routes"));
 var category_routes_1 = __importDefault(require("../routes/category.routes"));
 var product_routes_1 = __importDefault(require("../routes/product.routes"));
+var uploads_routes_1 = __importDefault(require("../routes/uploads.routes"));
 var Server = /** @class */ (function () {
     function Server() {
         this.app = express_1.default();
@@ -54,7 +56,8 @@ var Server = /** @class */ (function () {
             users: '/api/users',
             auth: '/api/auth',
             categories: '/api/categories',
-            products: '/api/products'
+            products: '/api/products',
+            uploads: '/api/uploads'
         };
         //conectar a base de datos
         this.conectarDb();
@@ -66,12 +69,18 @@ var Server = /** @class */ (function () {
         this.app.use(cors_1.default({ origin: true }));
         //parseo de body
         this.app.use(express_1.default.json());
+        //carga de archivos
+        this.app.use(express_fileupload_1.default({
+            useTempFiles: true,
+            tempFileDir: '/tmp/'
+        }));
     };
     Server.prototype.routes = function () {
         this.app.use(this.path.users, user_routes_1.default);
         this.app.use(this.path.auth, auth_routes_1.default);
         this.app.use(this.path.categories, category_routes_1.default);
         this.app.use(this.path.products, product_routes_1.default);
+        this.app.use(this.path.uploads, uploads_routes_1.default);
     };
     Server.prototype.conectarDb = function () {
         return __awaiter(this, void 0, void 0, function () {
