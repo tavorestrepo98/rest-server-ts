@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import path from 'path';
-import { UploadedFile } from 'express-fileupload';
+
+import { subirArchivo } from '../helpers/subir-archivo.helper';
 
 
-export const cargarArchivo = (req: Request, res: Response) => {
+export const cargarArchivo = async (req: Request, res: Response) => {
 
     if (!req.files || Object.keys(req.files).length === 0) {
         res.status(400).json({
@@ -21,23 +21,20 @@ export const cargarArchivo = (req: Request, res: Response) => {
         return;
     }
 
-    console.log('req.files >>>', req.files); // eslint-disable-line
-
-    const archivo: UploadedFile = req.files.archivo as UploadedFile;
-
-    const uploadPath = path.join(__dirname, '../uploads/' + archivo.name); 
-
-    archivo.mv(uploadPath, (err) => {
-        if (err) {
-            return res.status(500).json({
-                error: true,
-                message: err
-            });
-        }
-
+    try{
+        const pathArchivo = await subirArchivo(req.files)
         res.json({
-            message: 'El archivo se subió al path ', uploadPath
-        })
-    });
+            error: false,
+            pathArchivo
+        });
+    }catch(err){
+        res.json({
+            error: true,
+            message: err
+        });
+    }
+
+
+    
 
 }
